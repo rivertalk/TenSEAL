@@ -182,8 +182,8 @@ void bind_bfv_vector(py::module &m) {
                 const std::shared_ptr<SecretKey> &sk) {
                  return obj->decrypt(sk).data();
              })
-        .def("add", &BFVVector::add)
-        .def("add_", &BFVVector::add_inplace)
+        .def("add", &BFVVector::add, py::call_guard<py::gil_scoped_release>())
+        .def("add_", &BFVVector::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("add_plain", py::overload_cast<const int64_t &>(
                               &BFVVector::add_plain, py::const_))
         .def("add_plain",
@@ -196,8 +196,8 @@ void bind_bfv_vector(py::module &m) {
              })
         .def("add_plain_",
              py::overload_cast<const int64_t &>(&BFVVector::add_plain_inplace))
-        .def("sub", &BFVVector::sub)
-        .def("sub_", &BFVVector::sub_inplace)
+        .def("sub", &BFVVector::sub, py::call_guard<py::gil_scoped_release>())
+        .def("sub_", &BFVVector::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("sub_plain",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->sub_plain(other);
@@ -206,8 +206,8 @@ void bind_bfv_vector(py::module &m) {
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->sub_plain_inplace(other);
              })
-        .def("mul", &BFVVector::mul)
-        .def("mul_", &BFVVector::mul_inplace)
+        .def("mul", &BFVVector::mul, py::call_guard<py::gil_scoped_release>())
+        .def("mul_", &BFVVector::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("mul_plain", py::overload_cast<const int64_t &>(
                               &BFVVector::mul_plain, py::const_))
         .def("mul_plain",
@@ -220,47 +220,47 @@ void bind_bfv_vector(py::module &m) {
              })
         .def("mul_plain_",
              py::overload_cast<const int64_t &>(&BFVVector::mul_plain_inplace))
-        .def("polyval", &BFVVector::polyval)
-        .def("polyval_", &BFVVector::polyval_inplace)
-        .def("dot", &BFVVector::dot)
-        .def("dot", &BFVVector::dot_plain)
-        .def("dot_", &BFVVector::dot_inplace)
-        .def("dot_", &BFVVector::dot_plain_inplace)
-        .def("sum", &BFVVector::sum, py::arg("axis") = 0)
-        .def("sum_", &BFVVector::sum_inplace, py::arg("axis") = 0)
+        .def("polyval", &BFVVector::polyval, py::call_guard<py::gil_scoped_release>())
+        .def("polyval_", &BFVVector::polyval_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &BFVVector::dot, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &BFVVector::dot_plain, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &BFVVector::dot_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &BFVVector::dot_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("sum", &BFVVector::sum, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_", &BFVVector::sum_inplace, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
         // python arithmetic
-        .def("__add__", &BFVVector::add)
+        .def("__add__", &BFVVector::add, py::call_guard<py::gil_scoped_release>())
         .def("__add__", py::overload_cast<const int64_t &>(
                             &BFVVector::add_plain, py::const_))
         .def("__add__",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->add_plain(other);
              })
-        .def("__iadd__", &BFVVector::add_inplace)
+        .def("__iadd__", &BFVVector::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__iadd__",
              py::overload_cast<const int64_t &>(&BFVVector::add_plain_inplace))
         .def("__iadd__",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->add_plain_inplace(other);
              })
-        .def("__sub__", &BFVVector::sub)
+        .def("__sub__", &BFVVector::sub, py::call_guard<py::gil_scoped_release>())
         .def("__sub__",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->sub_plain(other);
              })
-        .def("__isub__", &BFVVector::sub_inplace)
+        .def("__isub__", &BFVVector::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__isub__",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->sub_plain_inplace(other);
              })
-        .def("__mul__", &BFVVector::mul)
+        .def("__mul__", &BFVVector::mul, py::call_guard<py::gil_scoped_release>())
         .def("__mul__", py::overload_cast<const int64_t &>(
                             &BFVVector::mul_plain, py::const_))
         .def("__mul__",
              [](shared_ptr<BFVVector> obj, const vector<int64_t> &other) {
                  return obj->mul_plain(other);
              })
-        .def("__imul__", &BFVVector::mul_inplace)
+        .def("__imul__", &BFVVector::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__imul__",
              py::overload_cast<const int64_t &>(&BFVVector::mul_plain_inplace))
         .def("__imul__",
@@ -323,14 +323,14 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const shared_ptr<SecretKey> &sk) {
                  return obj->decrypt(sk).data();
              })
-        .def("neg", &CKKSVector::negate)
-        .def("neg_", &CKKSVector::negate_inplace)
-        .def("square", &CKKSVector::square)
-        .def("square_", &CKKSVector::square_inplace)
-        .def("pow", &CKKSVector::power)
-        .def("pow_", &CKKSVector::power_inplace)
-        .def("add", &CKKSVector::add)
-        .def("add_", &CKKSVector::add_inplace)
+        .def("neg", &CKKSVector::negate, py::call_guard<py::gil_scoped_release>())
+        .def("neg_", &CKKSVector::negate_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("square", &CKKSVector::square, py::call_guard<py::gil_scoped_release>())
+        .def("square_", &CKKSVector::square_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("pow", &CKKSVector::power, py::call_guard<py::gil_scoped_release>())
+        .def("pow_", &CKKSVector::power_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("add", &CKKSVector::add, py::call_guard<py::gil_scoped_release>())
+        .def("add_", &CKKSVector::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("add_plain", py::overload_cast<const double &>(
                               &CKKSVector::add_plain, py::const_))
         .def("add_plain",
@@ -343,8 +343,8 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->add_plain_inplace(other);
              })
-        .def("sub", &CKKSVector::sub)
-        .def("sub_", &CKKSVector::sub_inplace)
+        .def("sub", &CKKSVector::sub, py::call_guard<py::gil_scoped_release>())
+        .def("sub_", &CKKSVector::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("sub_plain", py::overload_cast<const double &>(
                               &CKKSVector::sub_plain, py::const_))
         .def("sub_plain",
@@ -357,8 +357,8 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->sub_plain_inplace(other);
              })
-        .def("mul", &CKKSVector::mul)
-        .def("mul_", &CKKSVector::mul_inplace)
+        .def("mul", &CKKSVector::mul, py::call_guard<py::gil_scoped_release>())
+        .def("mul_", &CKKSVector::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("mul_plain", py::overload_cast<const double &>(
                               &CKKSVector::mul_plain, py::const_))
         .def("mul_plain",
@@ -371,20 +371,20 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->mul_plain_inplace(other);
              })
-        .def("polyval", &CKKSVector::polyval)
-        .def("polyval_", &CKKSVector::polyval_inplace)
+        .def("polyval", &CKKSVector::polyval, py::call_guard<py::gil_scoped_release>())
+        .def("polyval_", &CKKSVector::polyval_inplace, py::call_guard<py::gil_scoped_release>())
         // because dot doesn't have a magic function like __add__
         // we prefer to overload it instead of having dot_plain functions
-        .def("dot", &CKKSVector::dot)
-        .def("dot", &CKKSVector::dot_plain)
-        .def("dot_", &CKKSVector::dot_inplace)
-        .def("dot_", &CKKSVector::dot_plain_inplace)
-        .def("sum", &CKKSVector::sum, py::arg("axis") = 0)
-        .def("sum_", &CKKSVector::sum_inplace, py::arg("axis") = 0)
-        .def("matmul", &CKKSVector::matmul_plain)
-        .def("matmul_", &CKKSVector::matmul_plain_inplace)
-        .def("mm", &CKKSVector::matmul_plain)
-        .def("mm_", &CKKSVector::matmul_plain_inplace)
+        .def("dot", &CKKSVector::dot, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &CKKSVector::dot_plain, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &CKKSVector::dot_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &CKKSVector::dot_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("sum", &CKKSVector::sum, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_", &CKKSVector::sum_inplace, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("matmul", &CKKSVector::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("matmul_", &CKKSVector::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mm", &CKKSVector::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("mm_", &CKKSVector::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
         .def("conv2d_im2col",
              [](shared_ptr<CKKSVector> obj,
                 const vector<vector<double>> &matrix, const size_t windows_nb) {
@@ -406,10 +406,10 @@ void bind_ckks_vector(py::module &m) {
                  return obj->enc_matmul_plain_inplace(matrix, row_size);
              })
         // python arithmetic
-        .def("__neg__", &CKKSVector::negate)
-        .def("__pow__", &CKKSVector::power)
-        .def("__ipow__", &CKKSVector::power_inplace)
-        .def("__add__", &CKKSVector::add)
+        .def("__neg__", &CKKSVector::negate, py::call_guard<py::gil_scoped_release>())
+        .def("__pow__", &CKKSVector::power, py::call_guard<py::gil_scoped_release>())
+        .def("__ipow__", &CKKSVector::power_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("__add__", &CKKSVector::add, py::call_guard<py::gil_scoped_release>())
         .def("__add__", py::overload_cast<const double &>(
                             &CKKSVector::add_plain, py::const_))
         .def("__add__",
@@ -422,14 +422,14 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->add_plain(other);
              })
-        .def("__iadd__", &CKKSVector::add_inplace)
+        .def("__iadd__", &CKKSVector::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__iadd__",
              py::overload_cast<const double &>(&CKKSVector::add_plain_inplace))
         .def("__iadd__",
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->add_plain_inplace(other);
              })
-        .def("__sub__", &CKKSVector::sub)
+        .def("__sub__", &CKKSVector::sub, py::call_guard<py::gil_scoped_release>())
         .def("__sub__", py::overload_cast<const double &>(
                             &CKKSVector::sub_plain, py::const_))
         .def("__sub__",
@@ -458,14 +458,14 @@ void bind_ckks_vector(py::module &m) {
                  vec->add_plain_inplace(left_operand);
                  return vec;
              })
-        .def("__isub__", &CKKSVector::sub_inplace)
+        .def("__isub__", &CKKSVector::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__isub__",
              py::overload_cast<const double &>(&CKKSVector::sub_plain_inplace))
         .def("__isub__",
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->sub_plain_inplace(other);
              })
-        .def("__mul__", &CKKSVector::mul)
+        .def("__mul__", &CKKSVector::mul, py::call_guard<py::gil_scoped_release>())
         .def("__mul__", py::overload_cast<const double &>(
                             &CKKSVector::mul_plain, py::const_))
         .def("__mul__",
@@ -478,15 +478,15 @@ void bind_ckks_vector(py::module &m) {
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->mul_plain(other);
              })
-        .def("__imul__", &CKKSVector::mul_inplace)
+        .def("__imul__", &CKKSVector::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__imul__",
              py::overload_cast<const double &>(&CKKSVector::mul_plain_inplace))
         .def("__imul__",
              [](shared_ptr<CKKSVector> obj, const vector<double> &other) {
                  return obj->mul_plain_inplace(other);
              })
-        .def("__matmul__", &CKKSVector::matmul_plain)
-        .def("__imatmul__", &CKKSVector::matmul_plain_inplace)
+        .def("__matmul__", &CKKSVector::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("__imatmul__", &CKKSVector::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
         .def("context", &CKKSVector::tenseal_context)
         .def("link_context", &CKKSVector::link_tenseal_context)
         .def("serialize",
@@ -570,22 +570,22 @@ void bind_ckks_tensor(py::module &m) {
              [](shared_ptr<CKKSTensor> obj, const shared_ptr<SecretKey> &sk) {
                  return obj->decrypt(sk);
              })
-        .def("sum", &CKKSTensor::sum, py::arg("axis") = 0)
-        .def("sum_", &CKKSTensor::sum_inplace, py::arg("axis") = 0)
-        .def("sum_batch", &CKKSTensor::sum_batch)
-        .def("sum_batch_", &CKKSTensor::sum_batch_inplace)
-        .def("neg", &CKKSTensor::negate)
-        .def("neg_", &CKKSTensor::negate_inplace)
-        .def("square", &CKKSTensor::square)
-        .def("square_", &CKKSTensor::square_inplace)
-        .def("pow", &CKKSTensor::power)
-        .def("pow_", &CKKSTensor::power_inplace)
-        .def("add", &CKKSTensor::add)
-        .def("add_", &CKKSTensor::add_inplace)
-        .def("sub", &CKKSTensor::sub)
-        .def("sub_", &CKKSTensor::sub_inplace)
-        .def("mul", &CKKSTensor::mul)
-        .def("mul_", &CKKSTensor::mul_inplace)
+        .def("sum", &CKKSTensor::sum, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_", &CKKSTensor::sum_inplace, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_batch", &CKKSTensor::sum_batch, py::call_guard<py::gil_scoped_release>())
+        .def("sum_batch_", &CKKSTensor::sum_batch_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("neg", &CKKSTensor::negate, py::call_guard<py::gil_scoped_release>())
+        .def("neg_", &CKKSTensor::negate_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("square", &CKKSTensor::square, py::call_guard<py::gil_scoped_release>())
+        .def("square_", &CKKSTensor::square_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("pow", &CKKSTensor::power, py::call_guard<py::gil_scoped_release>())
+        .def("pow_", &CKKSTensor::power_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("add", &CKKSTensor::add, py::call_guard<py::gil_scoped_release>())
+        .def("add_", &CKKSTensor::add_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("sub", &CKKSTensor::sub, py::call_guard<py::gil_scoped_release>())
+        .def("sub_", &CKKSTensor::sub_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mul", &CKKSTensor::mul, py::call_guard<py::gil_scoped_release>())
+        .def("mul_", &CKKSTensor::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("add_plain", py::overload_cast<const double &>(
                               &CKKSTensor::add_plain, py::const_))
         .def("add_plain", py::overload_cast<const PlainTensor<double> &>(
@@ -610,22 +610,22 @@ void bind_ckks_tensor(py::module &m) {
              py::overload_cast<const double &>(&CKKSTensor::mul_plain_inplace))
         .def("mul_plain_", py::overload_cast<const PlainTensor<double> &>(
                                &CKKSTensor::mul_plain_inplace))
-        .def("polyval", &CKKSTensor::polyval)
-        .def("polyval_", &CKKSTensor::polyval_inplace)
-        .def("dot", &CKKSTensor::dot)
-        .def("dot_", &CKKSTensor::dot_inplace)
-        .def("dot", &CKKSTensor::dot_plain)
-        .def("dot_", &CKKSTensor::dot_plain_inplace)
-        .def("matmul", &CKKSTensor::matmul)
-        .def("matmul_", &CKKSTensor::matmul_inplace)
-        .def("matmul", &CKKSTensor::matmul_plain)
-        .def("matmul_", &CKKSTensor::matmul_plain_inplace)
-        .def("mm", &CKKSTensor::matmul)
-        .def("mm_", &CKKSTensor::matmul_inplace)
-        .def("mm", &CKKSTensor::matmul_plain)
-        .def("mm_", &CKKSTensor::matmul_plain_inplace)
+        .def("polyval", &CKKSTensor::polyval, py::call_guard<py::gil_scoped_release>())
+        .def("polyval_", &CKKSTensor::polyval_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &CKKSTensor::dot, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &CKKSTensor::dot_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &CKKSTensor::dot_plain, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &CKKSTensor::dot_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("matmul", &CKKSTensor::matmul, py::call_guard<py::gil_scoped_release>())
+        .def("matmul_", &CKKSTensor::matmul_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("matmul", &CKKSTensor::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("matmul_", &CKKSTensor::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mm", &CKKSTensor::matmul, py::call_guard<py::gil_scoped_release>())
+        .def("mm_", &CKKSTensor::matmul_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mm", &CKKSTensor::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("mm_", &CKKSTensor::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
         // python arithmetic
-        .def("__add__", &CKKSTensor::add)
+        .def("__add__", &CKKSTensor::add, py::call_guard<py::gil_scoped_release>())
         .def("__add__", py::overload_cast<const double &>(
                             &CKKSTensor::add_plain, py::const_))
         .def("__add__", py::overload_cast<const PlainTensor<double> &>(
@@ -634,12 +634,12 @@ void bind_ckks_tensor(py::module &m) {
                              &CKKSTensor::add_plain, py::const_))
         .def("__radd__", py::overload_cast<const PlainTensor<double> &>(
                              &CKKSTensor::add_plain, py::const_))
-        .def("__iadd__", &CKKSTensor::add_inplace)
+        .def("__iadd__", &CKKSTensor::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__iadd__",
              py::overload_cast<const double &>(&CKKSTensor::add_plain_inplace))
         .def("__iadd__", py::overload_cast<const PlainTensor<double> &>(
                              &CKKSTensor::add_plain_inplace))
-        .def("__mul__", &CKKSTensor::mul)
+        .def("__mul__", &CKKSTensor::mul, py::call_guard<py::gil_scoped_release>())
         .def("__mul__", py::overload_cast<const double &>(
                             &CKKSTensor::mul_plain, py::const_))
         .def("__mul__", py::overload_cast<const PlainTensor<double> &>(
@@ -648,16 +648,16 @@ void bind_ckks_tensor(py::module &m) {
                              &CKKSTensor::mul_plain, py::const_))
         .def("__rmul__", py::overload_cast<const PlainTensor<double> &>(
                              &CKKSTensor::mul_plain, py::const_))
-        .def("__imul__", &CKKSTensor::mul_inplace)
+        .def("__imul__", &CKKSTensor::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__imul__",
              py::overload_cast<const double &>(&CKKSTensor::mul_plain_inplace))
         .def("__imul__", py::overload_cast<const PlainTensor<double> &>(
                              &CKKSTensor::mul_plain_inplace))
-        .def("__matmul__", &CKKSTensor::matmul)
-        .def("__matmul__", &CKKSTensor::matmul_plain)
-        .def("__imatmul__", &CKKSTensor::matmul_inplace)
-        .def("__imatmul__", &CKKSTensor::matmul_plain_inplace)
-        .def("__sub__", &CKKSTensor::sub)
+        .def("__matmul__", &CKKSTensor::matmul, py::call_guard<py::gil_scoped_release>())
+        .def("__matmul__", &CKKSTensor::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("__imatmul__", &CKKSTensor::matmul_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("__imatmul__", &CKKSTensor::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("__sub__", &CKKSTensor::sub, py::call_guard<py::gil_scoped_release>())
         .def("__sub__", py::overload_cast<const double &>(
                             &CKKSTensor::sub_plain, py::const_))
         .def("__sub__", py::overload_cast<const PlainTensor<double> &>(
@@ -685,7 +685,7 @@ void bind_ckks_tensor(py::module &m) {
                  return vec;
              })
         .def("subscript", &CKKSTensor::subscript)
-        .def("__isub__", &CKKSTensor::sub_inplace)
+        .def("__isub__", &CKKSTensor::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__isub__",
              py::overload_cast<const double &>(&CKKSTensor::sub_plain_inplace))
         .def("__isub__", py::overload_cast<const PlainTensor<double> &>(
@@ -739,22 +739,22 @@ void bind_bfv_tensor(py::module &m) {
              [](shared_ptr<BFVTensor> obj, const shared_ptr<SecretKey> &sk) {
                  return obj->decrypt(sk);
              })
-        .def("sum", &BFVTensor::sum, py::arg("axis") = 0)
-        .def("sum_", &BFVTensor::sum_inplace, py::arg("axis") = 0)
-        .def("sum_batch", &BFVTensor::sum_batch)
-        .def("sum_batch_", &BFVTensor::sum_batch_inplace)
-        .def("neg", &BFVTensor::negate)
-        .def("neg_", &BFVTensor::negate_inplace)
-        .def("square", &BFVTensor::square)
-        .def("square_", &BFVTensor::square_inplace)
-        .def("pow", &BFVTensor::power)
-        .def("pow_", &BFVTensor::power_inplace)
-        .def("add", &BFVTensor::add)
-        .def("add_", &BFVTensor::add_inplace)
-        .def("sub", &BFVTensor::sub)
-        .def("sub_", &BFVTensor::sub_inplace)
-        .def("mul", &BFVTensor::mul)
-        .def("mul_", &BFVTensor::mul_inplace)
+        .def("sum", &BFVTensor::sum, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_", &BFVTensor::sum_inplace, py::arg("axis") = 0, py::call_guard<py::gil_scoped_release>())
+        .def("sum_batch", &BFVTensor::sum_batch, py::call_guard<py::gil_scoped_release>())
+        .def("sum_batch_", &BFVTensor::sum_batch_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("neg", &BFVTensor::negate, py::call_guard<py::gil_scoped_release>())
+        .def("neg_", &BFVTensor::negate_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("square", &BFVTensor::square, py::call_guard<py::gil_scoped_release>())
+        .def("square_", &BFVTensor::square_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("pow", &BFVTensor::power, py::call_guard<py::gil_scoped_release>())
+        .def("pow_", &BFVTensor::power_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("add", &BFVTensor::add, py::call_guard<py::gil_scoped_release>())
+        .def("add_", &BFVTensor::add_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("sub", &BFVTensor::sub, py::call_guard<py::gil_scoped_release>())
+        .def("sub_", &BFVTensor::sub_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mul", &BFVTensor::mul, py::call_guard<py::gil_scoped_release>())
+        .def("mul_", &BFVTensor::mul_inplace, py::call_guard<py::gil_scoped_release>())
         .def("add_plain", py::overload_cast<const int64_t &>(
                               &BFVTensor::add_plain, py::const_))
         .def("add_plain", py::overload_cast<const PlainTensor<int64_t> &>(
@@ -779,22 +779,22 @@ void bind_bfv_tensor(py::module &m) {
              py::overload_cast<const int64_t &>(&BFVTensor::mul_plain_inplace))
         .def("mul_plain_", py::overload_cast<const PlainTensor<int64_t> &>(
                                &BFVTensor::mul_plain_inplace))
-        .def("polyval", &BFVTensor::polyval)
-        .def("polyval_", &BFVTensor::polyval_inplace)
-        .def("dot", &BFVTensor::dot)
-        .def("dot_", &BFVTensor::dot_inplace)
-        .def("dot", &BFVTensor::dot_plain)
-        .def("dot_", &BFVTensor::dot_plain_inplace)
-        .def("matmul", &BFVTensor::matmul)
-        .def("matmul_", &BFVTensor::matmul_inplace)
-        .def("matmul", &BFVTensor::matmul_plain)
-        .def("matmul_", &BFVTensor::matmul_plain_inplace)
-        .def("mm", &BFVTensor::matmul)
-        .def("mm_", &BFVTensor::matmul_inplace)
-        .def("mm", &BFVTensor::matmul_plain)
-        .def("mm_", &BFVTensor::matmul_plain_inplace)
+        .def("polyval", &BFVTensor::polyval, py::call_guard<py::gil_scoped_release>())
+        .def("polyval_", &BFVTensor::polyval_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &BFVTensor::dot, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &BFVTensor::dot_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("dot", &BFVTensor::dot_plain, py::call_guard<py::gil_scoped_release>())
+        .def("dot_", &BFVTensor::dot_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("matmul", &BFVTensor::matmul, py::call_guard<py::gil_scoped_release>())
+        .def("matmul_", &BFVTensor::matmul_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("matmul", &BFVTensor::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("matmul_", &BFVTensor::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mm", &BFVTensor::matmul, py::call_guard<py::gil_scoped_release>())
+        .def("mm_", &BFVTensor::matmul_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("mm", &BFVTensor::matmul_plain, py::call_guard<py::gil_scoped_release>())
+        .def("mm_", &BFVTensor::matmul_plain_inplace, py::call_guard<py::gil_scoped_release>())
         // python arithmetic
-        .def("__add__", &BFVTensor::add)
+        .def("__add__", &BFVTensor::add, py::call_guard<py::gil_scoped_release>())
         .def("__add__", py::overload_cast<const int64_t &>(
                             &BFVTensor::add_plain, py::const_))
         .def("__add__", py::overload_cast<const PlainTensor<int64_t> &>(
@@ -803,7 +803,7 @@ void bind_bfv_tensor(py::module &m) {
                              &BFVTensor::add_plain, py::const_))
         .def("__radd__", py::overload_cast<const PlainTensor<int64_t> &>(
                              &BFVTensor::add_plain, py::const_))
-        .def("__iadd__", &BFVTensor::add_inplace)
+        .def("__iadd__", &BFVTensor::add_inplace, py::call_guard<py::gil_scoped_release>())
         .def("__iadd__",
              py::overload_cast<const int64_t &>(&BFVTensor::add_plain_inplace))
         .def("__iadd__", py::overload_cast<const PlainTensor<int64_t> &>(
