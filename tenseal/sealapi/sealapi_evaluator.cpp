@@ -26,131 +26,164 @@ void bind_seal_evaluator(pybind11::module &m) {
     py::class_<Evaluator, std::shared_ptr<Evaluator>>(m, "Evaluator",
                                                       py::module_local())
         .def(py::init<const SEALContext &>())
-        .def("add_inplace", &Evaluator::add_inplace)
-        .def("sub_inplace", &Evaluator::sub_inplace)
+        .def("add_inplace", &Evaluator::add_inplace, py::call_guard<py::gil_scoped_release>())
+        .def("sub_inplace", &Evaluator::sub_inplace, py::call_guard<py::gil_scoped_release>())
         .def("multiply_inplace",
              [](Evaluator &e, Ciphertext &l, const Ciphertext &r) {
                  e.multiply_inplace(l, r);
-             })
-        .def("negate_inplace", &Evaluator::negate_inplace)
+             },
+             py::call_guard<py::gil_scoped_release>())
+        .def("negate_inplace", &Evaluator::negate_inplace, py::call_guard<py::gil_scoped_release>())
         .def("square_inplace",
-             [](Evaluator &e, Ciphertext &l) { e.square_inplace(l); })
-        .def("negate", &Evaluator::negate)
+             [](Evaluator &e, Ciphertext &l) { e.square_inplace(l); },
+             py::call_guard<py::gil_scoped_release>())
+        .def("negate", &Evaluator::negate, py::call_guard<py::gil_scoped_release>())
         .def("square", [](Evaluator &e, const Ciphertext &src,
-                          Ciphertext &dst) { e.square(src, dst); })
-        .def("add", &Evaluator::add)
-        .def("sub", &Evaluator::sub)
+                          Ciphertext &dst) { e.square(src, dst); },
+             py::call_guard<py::gil_scoped_release>())
+        .def("add", &Evaluator::add, py::call_guard<py::gil_scoped_release>())
+        .def("sub", &Evaluator::sub, py::call_guard<py::gil_scoped_release>())
         .def("multiply",
              [](Evaluator &e, const Ciphertext &e1, const Ciphertext &e2,
-                Ciphertext &dst) { e.multiply(e1, e2, dst); })
+                Ciphertext &dst) { e.multiply(e1, e2, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("add_plain_inplace",
              [](Evaluator &e, Ciphertext &l, const Plaintext &r) {
                  e.add_plain_inplace(l, r);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("sub_plain_inplace",
              [](Evaluator &e, Ciphertext &l, const Plaintext &r) {
                  e.sub_plain_inplace(l, r);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("multiply_plain_inplace",
              [](Evaluator &e, Ciphertext &enc, const Plaintext &p) {
                  e.multiply_plain_inplace(enc, p);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("add_plain",
              [](Evaluator &e, const Ciphertext &e1, const Plaintext &e2,
-                Ciphertext &dst) { e.add_plain(e1, e2, dst); })
+                Ciphertext &dst) { e.add_plain(e1, e2, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("sub_plain",
              [](Evaluator &e, const Ciphertext &e1, const Plaintext &e2,
-                Ciphertext &dst) { e.sub_plain(e1, e2, dst); })
+                Ciphertext &dst) { e.sub_plain(e1, e2, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("multiply_plain",
              [](Evaluator &e, const Ciphertext &enc, const Plaintext &p,
-                Ciphertext &out) { e.multiply_plain(enc, p, out); })
+                Ciphertext &out) { e.multiply_plain(enc, p, out); },
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_next_inplace",
              [](Evaluator &e, Ciphertext &dst) {
                  e.mod_switch_to_next_inplace(dst);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_next",
              [](Evaluator &e, const Ciphertext &enc, Ciphertext &dst) {
                  e.mod_switch_to_next(enc, dst);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("exponentiate_inplace",
              [](Evaluator &e, Ciphertext &enc, std::uint64_t exponent,
                 const RelinKeys &relin_keys) {
                  e.exponentiate_inplace(enc, exponent, relin_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("exponentiate",
              [](Evaluator &e, const Ciphertext &enc, std::uint64_t exponent,
                 const RelinKeys &relin_keys, Ciphertext &out) {
                  e.exponentiate(enc, exponent, relin_keys, out);
-             })
-        .def("add_many", &Evaluator::add_many)
+             },
+             py::call_guard<py::gil_scoped_release>())
+        .def("add_many", &Evaluator::add_many, py::call_guard<py::gil_scoped_release>())
         .def("multiply_many",
              [](Evaluator &e, const std::vector<Ciphertext> &enc,
                 const RelinKeys &relin_keys,
-                Ciphertext &dst) { e.multiply_many(enc, relin_keys, dst); })
+                Ciphertext &dst) { e.multiply_many(enc, relin_keys, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("relinearize_inplace",
              [](Evaluator &e, Ciphertext &enc, const RelinKeys &relin_keys) {
                  e.relinearize_inplace(enc, relin_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def(
             "relinearize",
             [](Evaluator &e, const Ciphertext &enc, const RelinKeys &relin_keys,
-               Ciphertext &out) { e.relinearize(enc, relin_keys, out); })
+               Ciphertext &out) { e.relinearize(enc, relin_keys, out); },
+            py::call_guard<py::gil_scoped_release>())
         .def("transform_to_ntt_inplace",
              [](Evaluator &e, Plaintext &in, parms_id_type parms_id) {
                  e.transform_to_ntt_inplace(in, parms_id);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("transform_to_ntt",
              [](Evaluator &e, const Plaintext &in, parms_id_type parms_id,
-                Plaintext &dst) { e.transform_to_ntt(in, parms_id, dst); })
+                Plaintext &dst) { e.transform_to_ntt(in, parms_id, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_next",
              py::overload_cast<const Plaintext &, Plaintext &>(
-                 &Evaluator::mod_switch_to_next, py::const_))
+                 &Evaluator::mod_switch_to_next, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_next_inplace",
              py::overload_cast<Plaintext &>(
-                 &Evaluator::mod_switch_to_next_inplace, py::const_))
+                 &Evaluator::mod_switch_to_next_inplace, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_inplace",
              py::overload_cast<Plaintext &, parms_id_type>(
-                 &Evaluator::mod_switch_to_inplace, py::const_))
+                 &Evaluator::mod_switch_to_inplace, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to_inplace",
              [](Evaluator &e, Ciphertext &enc, parms_id_type parms_id) {
                  e.mod_switch_to_inplace(enc, parms_id);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to",
              [](Evaluator &e, const Ciphertext &enc, parms_id_type parms_id,
-                Ciphertext &dst) { e.mod_switch_to(enc, parms_id, dst); })
+                Ciphertext &dst) { e.mod_switch_to(enc, parms_id, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("mod_switch_to",
              py::overload_cast<const Plaintext &, parms_id_type, Plaintext &>(
-                 &Evaluator::mod_switch_to, py::const_))
+                 &Evaluator::mod_switch_to, py::const_),
+             py::call_guard<py::gil_scoped_release>())
 
         .def("rescale_to_next",
              [](Evaluator &e, const Ciphertext &enc, Ciphertext &dst) {
                  e.rescale_to_next(enc, dst);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rescale_to_next_inplace",
              [](Evaluator &e, Ciphertext &enc) {
                  e.rescale_to_next_inplace(enc);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rescale_to_inplace",
              [](Evaluator &e, Ciphertext &enc, parms_id_type parms_id) {
                  e.rescale_to_inplace(enc, parms_id);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
 
         .def("rescale_to",
              [](Evaluator &e, const Ciphertext &enc, parms_id_type parms_id,
-                Ciphertext &dst) { e.rescale_to(enc, parms_id, dst); })
+                Ciphertext &dst) { e.rescale_to(enc, parms_id, dst); },
+             py::call_guard<py::gil_scoped_release>())
 
         .def("transform_to_ntt_inplace",
              py::overload_cast<Ciphertext &>(
-                 &Evaluator::transform_to_ntt_inplace, py::const_))
+                 &Evaluator::transform_to_ntt_inplace, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("transform_to_ntt",
              py::overload_cast<const Ciphertext &, Ciphertext &>(
-                 &Evaluator::transform_to_ntt, py::const_))
+                 &Evaluator::transform_to_ntt, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("transform_from_ntt_inplace",
              py::overload_cast<Ciphertext &>(
-                 &Evaluator::transform_from_ntt_inplace, py::const_))
+                 &Evaluator::transform_from_ntt_inplace, py::const_),
+             py::call_guard<py::gil_scoped_release>())
         .def("transform_from_ntt",
              py::overload_cast<const Ciphertext &, Ciphertext &>(
-                 &Evaluator::transform_from_ntt, py::const_))
+                 &Evaluator::transform_from_ntt, py::const_),
+             py::call_guard<py::gil_scoped_release>())
 
         .def("apply_galois_inplace",
              [](Evaluator &e, Ciphertext &encrypted, std::uint32_t galois_elt,
