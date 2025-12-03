@@ -156,53 +156,63 @@ void bind_seal_evaluator(pybind11::module &m) {
              [](Evaluator &e, Ciphertext &encrypted, std::uint32_t galois_elt,
                 const GaloisKeys &galois_keys) {
                  e.apply_galois_inplace(encrypted, galois_elt, galois_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("apply_galois",
              [](Evaluator &e, const Ciphertext &encrypted,
                 std::uint64_t galois_elt, const GaloisKeys &galois_keys,
                 Ciphertext &destination) {
                  e.apply_galois(encrypted, galois_elt, galois_keys,
                                 destination);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
 
         .def("rotate_rows_inplace",
              [](Evaluator &e, Ciphertext &enc, int steps,
                 const GaloisKeys &galois_keys) {
                  e.rotate_rows_inplace(enc, steps, galois_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rotate_rows",
              [](Evaluator &e, const Ciphertext &enc, int steps,
                 const GaloisKeys &galois_keys, Ciphertext &dst) {
                  e.rotate_rows(enc, steps, galois_keys, dst);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rotate_columns",
              [](Evaluator &e, const Ciphertext &enc,
                 const GaloisKeys &galois_keys,
-                Ciphertext &dst) { e.rotate_columns(enc, galois_keys, dst); })
+                Ciphertext &dst) { e.rotate_columns(enc, galois_keys, dst); },
+             py::call_guard<py::gil_scoped_release>())
         .def("rotate_columns_inplace",
              [](Evaluator &e, Ciphertext &enc, const GaloisKeys &galois_key) {
                  e.rotate_columns_inplace(enc, galois_key);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rotate_vector_inplace",
              [](Evaluator &e, Ciphertext &enc, int steps,
                 const GaloisKeys &galois_keys) {
                  e.rotate_vector_inplace(enc, steps, galois_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("rotate_vector",
              [](Evaluator &e, const Ciphertext &enc, int steps,
                 const GaloisKeys &galois_keys, Ciphertext &dst) {
                  e.rotate_vector(enc, steps, galois_keys, dst);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
 
         .def("complex_conjugate_inplace",
              [](Evaluator &e, Ciphertext &enc, const GaloisKeys &galois_keys) {
                  e.complex_conjugate_inplace(enc, galois_keys);
-             })
+             },
+             py::call_guard<py::gil_scoped_release>())
         .def("complex_conjugate",
              [](Evaluator &e, const Ciphertext &enc,
                 const GaloisKeys &galois_keys, Ciphertext &dst) {
                  e.complex_conjugate(enc, galois_keys, dst);
-             });
+             },
+             py::call_guard<py::gil_scoped_release>());
     /***
      * } "seal/evaluator.h"
      *******************/
